@@ -1,0 +1,13 @@
+{
+	"name": "gutenberg-release-plugin",
+	"owner": {
+		"name": "ramonjd",
+		"url": "https://github.com/ramonjd"
+	},
+	"plugins": [
+		{
+			"name": "gutenberg-release",
+			"source": "./"
+		}
+	]
+}

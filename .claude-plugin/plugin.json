@@ -1,0 +1,12 @@
+{
+	"name": "gutenberg-release",
+	"version": "0.1.0",
+	"description": "Phase-by-phase helper for coordinating a Gutenberg plugin release rotation — changelog curation, PR labeling, backports, builds, the \"What's new\" post, and X.Y.Z point releases.",
+	"author": {
+		"name": "ramonjd",
+		"url": "https://github.com/ramonjd"
+	},
+	"repository": "https://github.com/ramonjd/gutenberg-release-plugin",
+	"license": "GPL-2.0-or-later",
+	"keywords": ["gutenberg", "wordpress", "release", "release-management"]
+}
