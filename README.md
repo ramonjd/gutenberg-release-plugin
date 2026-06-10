@@ -6,25 +6,16 @@ It narrates every step, **asks before any mutating action** (labeling PRs, dispa
 
 ## Install
 
-**From the repo (recommended — picks up updates):**
-
-```
-/plugin marketplace add ramonjd/gutenberg-release-plugin
-/plugin install gutenberg-release
-```
-
-Despite the command name, nothing is published to any registry — this just points your Claude Code at this GitHub repo. Updates ship as version bumps here; update via `/plugin` to pick them up.
-
-**Or clone and run locally:**
+Clone the repo and point Claude Code at it:
 
 ```bash
 git clone https://github.com/ramonjd/gutenberg-release-plugin.git
 claude --plugin-dir /path/to/gutenberg-release-plugin
 ```
 
-The local-dir route doesn't auto-update — `git pull` to refresh.
+To update, `git pull` — version bumps are noted in the commit history.
 
-> Once installed from the repo, the skill may be namespaced as `/gutenberg-release:gutenberg-release`; the bare `/gutenberg-release` works when unambiguous.
+> The skill may surface namespaced as `/gutenberg-release:gutenberg-release`; the bare `/gutenberg-release` works when unambiguous.
 
 ## Requirements
 

@@ -33,7 +33,7 @@ Goal: cut RC1 cleanly.
    ```
    Gutenberg X.Y RC1 is out ✅
    • Zip: https://github.com/WordPress/gutenberg/releases/tag/vX.Y.0-rc.1
-   • npm packages are published under the `next` dist-tag
+   • npm packages are published under the `latest` dist-tag
    • Please help test! Stable lands in ~5 days — fixes meant for X.Y need the
      `Backport to Gutenberg RC` label after merging to trunk.
    ```
