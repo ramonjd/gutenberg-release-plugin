@@ -28,5 +28,13 @@ Goal: cut RC1 cleanly.
    > Heads-up — the NPM_TOKEN secret for WordPress/gutenberg looks rotated
    > (npm publish hit 401). Could someone refresh it? Workflow run: <run URL>
    ```
-5. **Verify milestone `Gutenberg X.Y+1` appears — do not create it manually.** The PR-merge automation (`add-milestone` task in `packages/project-management-automation`) creates it on the first merge after the RC1 version bump and assigns merged PRs to it. Check read-only via `gh api` once post-RC1 PRs have merged. If it's still missing: confirm the `Gutenberg X.Y` milestone has a due date (the automation derives the next due date from it), then create it by hand.
-6. **Do not close the `Gutenberg X.Y` milestone.** Closing it breaks `npm run other:changelog`; it closes in the `stable` phase, after the post is live.
+5. **Announce RC1 availability in `#core-editor` (w.org)** once the run completes successfully. The testing window before stable is short — call for testing explicitly. Draft for the user to paste:
+   ```
+   Gutenberg X.Y RC1 is out ✅
+   • Zip: https://github.com/WordPress/gutenberg/releases/tag/vX.Y.0-rc.1
+   • npm packages are published under the `next` dist-tag
+   • Please help test! Stable lands in ~5 days — fixes meant for X.Y need the
+     `Backport to Gutenberg RC` label after merging to trunk.
+   ```
+6. **Verify milestone `Gutenberg X.Y+1` appears — do not create it manually.** The PR-merge automation (`add-milestone` task in `packages/project-management-automation`) creates it on the first merge after the RC1 version bump and assigns merged PRs to it. Check read-only via `gh api` once post-RC1 PRs have merged. If it's still missing: confirm the `Gutenberg X.Y` milestone has a due date (the automation derives the next due date from it), then create it by hand.
+7. **Do not close the `Gutenberg X.Y` milestone.** Closing it breaks `npm run other:changelog`; it closes in the `stable` phase, after the post is live.
