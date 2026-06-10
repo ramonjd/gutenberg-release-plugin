@@ -1,6 +1,6 @@
 {
 	"name": "gutenberg-release",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Phase-by-phase helper for coordinating a Gutenberg plugin release rotation — changelog curation, PR labeling, backports, builds, the \"What's new\" post, and X.Y.Z point releases.",
 	"author": {
 		"name": "ramonjd",
