@@ -1,6 +1,6 @@
 ---
 name: gutenberg-release
-description: Use when coordinating a Gutenberg plugin release rotation (RC, stable, or X.Y.Z point release) — changelog curation, PR labeling, backports/cherry-picks, plugin-zip builds, "What's new" post, milestone hygiene. Pass a phase argument: setup, rc, backport, whats-new, stable, or patch.
+description: Use when coordinating a Gutenberg plugin release rotation (RC, stable, or X.Y.Z point release) — changelog curation, PR labeling, backports/cherry-picks, plugin-zip builds, "What's new" post, milestone hygiene. Pass a phase argument — setup, rc, backport, whats-new, stable, or patch.
 ---
 
 # Gutenberg Release
