@@ -12,12 +12,12 @@ Goal: draft and get review on the "What's new in Gutenberg X.Y" Make Core post.
    ```
 2. **Confirm the release context.** If the user does not pass `X.Y`, infer it from the latest RC tag (`git tag --list 'v*-rc.*' --sort=-v:refname | head`) and verify with `gh release view vX.Y.0-rc.1 --repo WordPress/gutenberg`. Then check the `Gutenberg X.Y` milestone state and due date. Treat these as read-only checks.
 3. **Gather source material.** Pull the RC release notes and milestone PRs. Use the generated changelog to identify candidate highlights, but source every highlight from the originating PR or issue body before drafting prose.
-4. **Choose highlights deliberately.** Prefer 2–4 items that meet at least one of these criteria:
-   - **Visual story:** the change can be shown with a screenshot, before/after comparison, short clip, or clear UI walkthrough.
-   - **User impact:** the change noticeably improves a common editing, site-building, publishing, media, accessibility, or admin workflow.
-   - **Developer/platform impact:** the change introduces a meaningful API, extensibility point, compatibility milestone, or design-system primitive.
-   - **Strategic signal:** the change advances an important project direction, such as DataViews, the Site Editor, media workflows, collaboration, dashboard work, or WordPress design system alignment.
-   Avoid highlighting internal refactors, dependency bumps, test/build tooling, or minor polish unless they clearly unlock one of the criteria above. If a candidate is experimental, say so plainly.
+4. **Choose highlights deliberately.** Prefer 2–4 items with clear user or developer impact. A good highlight should meet one or more of these criteria, in priority order:
+   - **High user impact:** noticeably improves a common editing, site-building, publishing, media, accessibility, or admin workflow.
+   - **High developer impact:** introduces a meaningful API, extensibility point, compatibility milestone, or design-system primitive.
+   - **Major project milestone:** marks visible progress in a large project direction, such as DataViews, the Site Editor, media workflows, collaboration, dashboard work, React compatibility, or WordPress design system alignment.
+   - **Visual communication:** can be shown with a screenshot, before/after comparison, short clip, or clear UI walkthrough.
+   Prefer visually communicable features when impact is otherwise similar. Avoid highlighting internal refactors, dependency bumps, test/build tooling, or minor polish unless they clearly unlock one of the criteria above. If a candidate is experimental, say so plainly.
 5. **Draft the post as block markup, not Markdown** — the user pastes it into the Make Core editor. Prefer writing the draft to `.context/gutenberg-X.Y-whats-new-draft.html` and a companion source audit to `.context/gutenberg-X.Y-whats-new-sources.md` so the user can review and other agents can continue the work:
    ```html
    <!-- wp:heading {"level":2} -->
