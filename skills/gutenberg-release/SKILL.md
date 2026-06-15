@@ -16,6 +16,9 @@ back for review.
 /gutenberg-release <phase> [version]
 ```
 
+If slash commands are not available, ask the agent to use the Gutenberg release
+skill for the desired phase and version.
+
 | Phase | When | File |
 |---|---|---|
 | `setup` | Days 1–2: checklist issue, PR labeling, milestone hygiene | `phases/setup.md` |
@@ -36,17 +39,17 @@ If no phase is passed, ask the user which phase they're on, then read that file.
 ## Interaction protocol (every step in every phase)
 
 1. **Narrate** the step in one short sentence — what's about to happen and why.
-2. **Ask** via `AskUserQuestion`: short question (e.g. "Run this now?"), header ≤12 chars, two options: "Yes, do it" / "I'll do it manually".
+2. **Ask** with the agent's available approval mechanism (or a direct user question): short question (e.g. "Run this now?"), header ≤12 chars when supported, two options: "Yes, do it" / "I'll do it manually".
 3. If "Yes": execute, then **show the result in a verifiable form** — PRs changed, issue URL, summary table, diff. Wait for "looks good" or fixes before moving on.
 4. If "I'll do it manually": wait for the user to say it's done, then continue.
 
 **Hard rules:**
 - Never chain two mutating actions without an approval gate between them.
 - Read-only queries (listing PRs, milestone state, CI status) run inline without asking.
-- **Slack messages: never ask y/n.** Claude can't post to Slack — draft the message in a fenced block and tell the user where to paste it.
+- **Slack messages: never ask y/n.** Do not post to Slack — draft the message in a fenced block and tell the user where to paste it.
 
 **Example gate:**
-> **❓ Ask** — *Label PRs*: "Apply these 4 label changes?"
+> **Ask** — *Label PRs*: "Apply these 4 label changes?"
 > Options: `Yes, do it` · `I'll do it manually`
 >
 > After applying: show the before → after table and wait for confirmation.

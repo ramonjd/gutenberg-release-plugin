@@ -3,7 +3,7 @@
 The skill references repo files and official docs wherever possible, but a few facts are
 hard-coded. Each row pairs a claim with the command that re-verifies it — run from a
 Gutenberg checkout. If a check fails, fix the corresponding phase file and bump the
-plugin version in `.claude-plugin/plugin.json`.
+plugin version in `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json`.
 
 | Claim (where) | Verify with | Expect |
 |---|---|---|

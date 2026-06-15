@@ -1,0 +1,29 @@
+{
+	"name": "gutenberg-release",
+	"version": "0.1.6",
+	"description": "Phase-by-phase helper for coordinating a Gutenberg plugin release rotation — changelog curation, PR labeling, backports, builds, the \"What's new\" post, and X.Y.Z point releases.",
+	"author": {
+		"name": "ramonjd",
+		"url": "https://github.com/ramonjd"
+	},
+	"homepage": "https://github.com/ramonjd/gutenberg-release-plugin",
+	"repository": "https://github.com/ramonjd/gutenberg-release-plugin",
+	"license": "GPL-2.0-or-later",
+	"keywords": ["gutenberg", "wordpress", "release", "release-management"],
+	"skills": "./skills/",
+	"interface": {
+		"displayName": "Gutenberg Release",
+		"shortDescription": "Guided workflows for Gutenberg plugin releases.",
+		"longDescription": "Phase-by-phase help for setup, RC builds, backports, What's new posts, stable releases, and patch releases.",
+		"developerName": "ramonjd",
+		"category": "Productivity",
+		"capabilities": ["Interactive", "Write"],
+		"websiteURL": "https://github.com/ramonjd/gutenberg-release-plugin",
+		"defaultPrompt": [
+			"Run Gutenberg release setup",
+			"Prepare a Gutenberg RC",
+			"Draft the Gutenberg What's new post"
+		],
+		"brandColor": "#3858E9"
+	}
+}

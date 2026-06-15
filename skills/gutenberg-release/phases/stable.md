@@ -8,7 +8,7 @@ Goal: ship stable, publish the post, hand off.
 2. **Trigger the stable `Build Gutenberg Plugin Zip`.** Always ask first — this is the public release, never auto-run. Post back the run URL.
 3. **Curate the draft release notes, then publish the release.** The draft combines the published RC changelogs plus anything cherry-picked since — delete the RC version headers (informational only) and move post-RC1 entries into the right sections. If RC1's changelog was fully curated before *it* was published, this is quick. The user presses "Publish release" ("Set as the latest release" is pre-selected for stable — leave the checkboxes alone).
 4. **Approve the wp.org upload.** Publishing the release triggers the `Update Changelog and upload Gutenberg plugin to WordPress.org plugin repo` workflow, which needs approval from a Gutenberg Release, Gutenberg Core, or WordPress Core team member — the user can approve it themselves if they're on one of those teams, otherwise draft the `#core-editor` ask. Once it completes, confirm the new version appears on https://wordpress.org/plugins/gutenberg/ (may lag a little).
-5. **Publish the "What's new" post — user's action.** Claude can't publish to Make Core. Surface the draft URL, tell the user to hit Publish, and wait for the live URL before continuing.
+5. **Publish the "What's new" post — user's action.** Agents cannot publish to Make Core. Surface the draft URL, tell the user to hit Publish, and wait for the live URL before continuing.
 6. **Announce** in `#core-editor` (w.org) and `#core` (a8c) — fenced Slack drafts with the live post URL embedded:
    ```
    > Gutenberg X.Y has been released! 🎉

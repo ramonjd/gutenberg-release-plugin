@@ -1,10 +1,12 @@
 # Gutenberg Release plugin
 
-A [Claude Code](https://claude.com/claude-code) plugin that walks a release manager through a [Gutenberg](https://github.com/WordPress/gutenberg) plugin release rotation, one phase at a time.
+An agent skill/plugin for [Claude Code](https://claude.com/claude-code) and Codex that walks a release manager through a [Gutenberg](https://github.com/WordPress/gutenberg) plugin release rotation, one phase at a time.
 
 It narrates every step, **asks before any mutating action** (labeling PRs, dispatching builds, closing milestones), and shows results back in a verifiable form. Slack messages are drafted for you to paste — it never posts anywhere on your behalf.
 
 ## Install
+
+### Claude Code
 
 Clone the repo and point Claude Code at it:
 
@@ -13,9 +15,23 @@ git clone https://github.com/ramonjd/gutenberg-release-plugin.git
 claude --plugin-dir /path/to/gutenberg-release-plugin
 ```
 
-To update, `git pull` — version bumps are noted in the commit history.
-
 > The skill may surface namespaced as `/gutenberg-release:gutenberg-release`; the bare `/gutenberg-release` works when unambiguous.
+
+### Codex
+
+Install the skill directly from this repo:
+
+```bash
+python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
+  --repo ramonjd/gutenberg-release-plugin \
+  --path skills/gutenberg-release
+```
+
+Then restart Codex or start a new thread so the skill list refreshes.
+
+The repo also includes `.codex-plugin/plugin.json` for Codex plugin packaging.
+
+To update, `git pull` if you cloned the plugin locally, or reinstall the Codex skill from GitHub. Version bumps are noted in the commit history.
 
 ## Requirements
 
@@ -28,6 +44,8 @@ To update, `git pull` — version bumps are noted in the commit history.
 ```
 /gutenberg-release <phase> [version]
 ```
+
+If slash commands are not available, ask the agent to use the Gutenberg release skill with a phase and optional version.
 
 | Phase | When |
 |---|---|
