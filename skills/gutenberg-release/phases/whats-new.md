@@ -31,5 +31,6 @@ Goal: draft and get review on the "What's new in Gutenberg X.Y" Make Core post.
    ⚠ "Refreshed every 30s" — no source PR found             — remove unless sourced
    ```
    The source audit should list checked PRs separately from changelog-only bullets that need deeper review before publication.
-6. **Refresh before publishing.** Before the final stable post goes live, refresh from the stable release notes and any post-RC backports. Do not present the RC changelog as final if stable has not shipped yet.
-7. **Post for review** in `#core` (w.org), optionally `#design` (w.org) and `#core` (a8c). Draft each Slack message in a fenced block for the user to paste.
+6. **Prepare the Make Core handoff.** Give the user the post title, the `.context` draft path, and any media/screenshot URLs that should be uploaded or embedded. Do not guess Make Core taxonomy, publish date, excerpt, or author metadata; ask the user if those are needed. Remind them to paste block markup into the code editor/block editor, preview the post, and check headings, links, images, and changelog freshness.
+7. **Refresh before publishing.** Before the final stable post goes live, refresh from the stable release notes and any post-RC backports. Do not present the RC changelog as final if stable has not shipped yet.
+8. **Post for review** in `#core` (w.org), optionally `#design` (w.org) and `#core` (a8c). Draft each Slack message in a fenced block for the user to paste. Include the Make Core draft URL if the user provides it.
