@@ -10,5 +10,19 @@ Goal: collect backport PRs, cut RC2 if needed.
    npm run other:cherry-pick "Backport to Gutenberg RC"
    ```
    **Always pass the label** — omitted, the script silently defaults to `Backport to WP Beta/RC` and picks WordPress-Core-backport PRs instead. If the user isn't on the Gutenberg Core team, the push to `release/X.Y` fails with `GH006` — fall back to asking a Core member to push, or open a coordination PR. The script comments on source PRs, strips the label, and realigns milestones automatically; don't second-guess it.
-3. **Review the results.** List each PR picked (PR → SHA) and any failures; wait for confirmation before cutting RC2.
+3. **Review the results.** List each PR picked (PR → SHA) and any failures. For any PR that cannot be cherry-picked cleanly because of conflicts, draft a source-PR comment asking the author for a manual backport PR. Fill in the PR number, release branch, merge SHA, conflict paths, and target version:
+   ```markdown
+   This PR did not cherry-pick cleanly into `release/X.Y` during the Gutenberg X.Y RC backport run. Could you please open a manual backport PR?
+
+   Suggested steps:
+   1. `git fetch origin`
+   2. `git checkout -b backport/<pr-number>-release-X.Y origin/release/X.Y`
+   3. `git cherry-pick -x <merge-sha>`
+   4. Resolve the conflicts in `<conflict-paths>`, then run `git add -A` and `git cherry-pick --continue`.
+   5. Push the branch and open a PR targeting `release/X.Y` with a title like `[Release/X.Y] Backport #<pr-number>`.
+   6. Link the backport PR in a comment here so we can include it in the RC cut.
+
+   If you hit permission issues or need help resolving the conflicts, mention it here and we can coordinate.
+   ```
+   Do not post the comment automatically; show the filled-in draft and ask whether to post it or let the user paste it manually. Wait for confirmation before cutting RC2.
 4. **Trigger `Build Gutenberg Plugin Zip` for RC2.** No npm-publish environment approval needed (npm publishes only on rc.1), but always ask before dispatching — timing depends on backport readiness. Post back the run URL.
