@@ -46,8 +46,11 @@ Goal: ship stable, publish the post, hand off.
      cp "$WORK/changelog.txt" "$TRUNK/changelog.txt"
      sed -i.bak "s/^Stable tag:.*/Stable tag: $VERSION/" "$TRUNK/readme.txt" && rm "$TRUNK/readme.txt.bak"
 
-     svn status "$TRUNK" | awk '$1 == "!" { print $2 }' | while IFS= read -r path; do svn rm "$path"; done
-     svn status "$TRUNK" | awk '$1 == "?" { print $2 }' | while IFS= read -r path; do svn add "$path"; done
+     svn status "$TRUNK" | awk '$1 == "!" { print $2 }' > "$WORK/missing-svn-paths.txt"
+     if [ -s "$WORK/missing-svn-paths.txt" ]; then
+       xargs svn rm < "$WORK/missing-svn-paths.txt"
+     fi
+     svn add --force "$TRUNK"
 
      mkdir "$TAGS/$VERSION"
      rsync -a --exclude='.svn' "$TRUNK/" "$TAGS/$VERSION/"
