@@ -62,10 +62,9 @@ Goal: ship stable, publish the post, hand off.
      # Add any new release files under trunk.
      svn add --force "$TRUNK"
 
-     # Create the version tag as a plain added directory from the prepared trunk contents.
-     mkdir "$TAGS/$VERSION"
-     rsync -a --exclude='.svn' "$TRUNK/" "$TAGS/$VERSION/"
-     svn add "$TAGS/$VERSION"
+     # Create the version tag from trunk using SVN copy-with-history, matching the workflow.
+     # This is much cheaper than adding the full tag contents as new files.
+     svn cp "$TRUNK" "$TAGS/$VERSION"
      ```
    - **Guardrails before commit**:
      ```bash
@@ -76,8 +75,8 @@ Goal: ship stable, publish the post, hand off.
      # This should print nothing: no unversioned, missing, or conflicted paths.
      svn status "$TRUNK" "$TAGS/$VERSION" | awk '$1 ~ /^[?!C]/ { print }'
 
-     # This should show plain "A", not "A +"; "A +" means SVN copied tag history.
-     svn status "$TAGS/$VERSION" | sed -n '1,5p' # should show plain "A", not "A +"
+     # This should show "A +"; the plus means SVN copied tag history instead of uploading a full plain-add tag.
+     svn status "$TAGS/$VERSION" | sed -n '1,5p'
      ```
    - **Commit both paths together** with the authorized WordPress.org SVN username:
      ```bash
@@ -88,7 +87,7 @@ Goal: ship stable, publish the post, hand off.
        --no-auth-cache \
        --config-option=servers:global:http-timeout=600
      ```
-     If SVN errors after `Committing transaction...`, do not immediately retry; run the verification commands again first. If SVN says creating `gutenberg/tags/X.Y.0` is forbidden, the account does not have the needed plugin SVN permission.
+     If SVN errors after `Committing transaction...`, do not immediately retry; run the verification commands again first. If `svn cp` or `svn commit` says creating `gutenberg/tags/X.Y.0` is forbidden, the account does not have the needed plugin SVN permission.
    - **Verify the manual publish succeeded** before continuing with announcements:
      ```bash
      # The versioned ZIP and SVN tag should both exist.
