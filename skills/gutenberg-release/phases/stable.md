@@ -26,45 +26,62 @@ Goal: ship stable, publish the post, hand off.
    - **If the SVN tag and ZIP are missing**, ask a person with Gutenberg plugin SVN commit access to manually create trunk + tag from the GitHub release artifact. Do not commit `trunk` alone; `Stable tag: X.Y.0` must not point at a missing tag.
    - **Manual SVN publish for an authorized committer**:
      ```bash
+     # Set the release version and keep all temporary files in one disposable workspace.
      VERSION=X.Y.0
      WORK=/tmp/gutenberg-svn-release-$VERSION
      TRUNK=$WORK/trunk
      TAGS=$WORK/tags
 
+     # Start clean so stale SVN state or old artifacts cannot leak into the release.
      rm -rf "$WORK"
      mkdir -p "$WORK"
 
+     # Check out SVN trunk and the tags directory separately.
      svn checkout https://plugins.svn.wordpress.org/gutenberg/trunk "$TRUNK"
      svn checkout --depth immediates https://plugins.svn.wordpress.org/gutenberg/tags "$TAGS"
 
+     # Download the exact GitHub release ZIP and the generated trunk changelog artifact.
      gh release download "v$VERSION" --repo WordPress/gutenberg --pattern gutenberg.zip --dir "$WORK"
      gh run download <failed-upload-run-id> --repo WordPress/gutenberg --name "changelog trunk" --dir "$WORK"
 
+     # Replace SVN trunk contents with the ZIP contents, preserving only SVN metadata.
      find "$TRUNK" -mindepth 1 -maxdepth 1 ! -name .svn -exec rm -rf {} +
      unzip -q "$WORK/gutenberg.zip" -d "$WORK/unzip"
      rsync -a "$WORK/unzip/" "$TRUNK/"
+
+     # Use the workflow-generated changelog and set readme.txt to the new stable tag.
      cp "$WORK/changelog.txt" "$TRUNK/changelog.txt"
      sed -i.bak "s/^Stable tag:.*/Stable tag: $VERSION/" "$TRUNK/readme.txt" && rm "$TRUNK/readme.txt.bak"
 
+     # Remove files SVN tracks but the new release no longer contains.
      svn status "$TRUNK" | awk '$1 == "!" { print $2 }' > "$WORK/missing-svn-paths.txt"
      if [ -s "$WORK/missing-svn-paths.txt" ]; then
        xargs svn rm < "$WORK/missing-svn-paths.txt"
      fi
+
+     # Add any new release files under trunk.
      svn add --force "$TRUNK"
 
+     # Create the version tag as a plain added directory from the prepared trunk contents.
      mkdir "$TAGS/$VERSION"
      rsync -a --exclude='.svn' "$TRUNK/" "$TAGS/$VERSION/"
      svn add "$TAGS/$VERSION"
      ```
    - **Guardrails before commit**:
      ```bash
+     # Confirm readme.txt and changelog.txt point at the version being published.
      grep -i '^Stable tag:' "$TRUNK/readme.txt"
      head -20 "$TRUNK/changelog.txt"
+
+     # This should print nothing: no unversioned, missing, or conflicted paths.
      svn status "$TRUNK" "$TAGS/$VERSION" | awk '$1 ~ /^[?!C]/ { print }'
+
+     # This should show plain "A", not "A +"; "A +" means SVN copied tag history.
      svn status "$TAGS/$VERSION" | sed -n '1,5p' # should show plain "A", not "A +"
      ```
    - **Commit both paths together** with the authorized WordPress.org SVN username:
      ```bash
+     # Commit trunk and the version tag together so Stable tag never points at a missing tag.
      svn commit "$TRUNK" "$TAGS/$VERSION" \
        -m "Releasing version $VERSION" \
        --username <wporg-svn-committer-username> \
@@ -74,8 +91,11 @@ Goal: ship stable, publish the post, hand off.
      If SVN errors after `Committing transaction...`, do not immediately retry; run the verification commands again first. If SVN says creating `gutenberg/tags/X.Y.0` is forbidden, the account does not have the needed plugin SVN permission.
    - **Verify the manual publish succeeded** before continuing with announcements:
      ```bash
+     # The versioned ZIP and SVN tag should both exist.
      curl -sI "https://downloads.wordpress.org/plugin/gutenberg.$VERSION.zip" | head -1
      curl -sI "https://plugins.svn.wordpress.org/gutenberg/tags/$VERSION/" | head -1
+
+     # SVN trunk should now advertise the new stable version.
      curl -s https://plugins.svn.wordpress.org/gutenberg/trunk/readme.txt | grep -i "Stable tag"
      ```
      Success means the ZIP and SVN tag return HTTP 200, and trunk shows `Stable tag: X.Y.0`. A browser check is also useful: visit `https://plugins.trac.wordpress.org/browser/gutenberg/tags/$VERSION` or `https://plugins.trac.wordpress.org/browser/gutenberg/#tags` and confirm the tag appears. The WordPress.org plugin page and Plugin API can lag behind the SVN commit.
