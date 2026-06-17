@@ -68,6 +68,13 @@ Goal: ship stable, publish the post, hand off.
        --config-option=servers:global:http-timeout=600
      ```
      If SVN errors after `Committing transaction...`, do not immediately retry; run the verification commands again first. If SVN says creating `gutenberg/tags/X.Y.0` is forbidden, the account does not have the needed plugin SVN permission.
+   - **Verify the manual publish succeeded** before continuing with announcements:
+     ```bash
+     curl -sI "https://downloads.wordpress.org/plugin/gutenberg.$VERSION.zip" | head -1
+     curl -sI "https://plugins.svn.wordpress.org/gutenberg/tags/$VERSION/" | head -1
+     curl -s https://plugins.svn.wordpress.org/gutenberg/trunk/readme.txt | grep -i "Stable tag"
+     ```
+     Success means the ZIP and SVN tag return HTTP 200, and trunk shows `Stable tag: X.Y.0`. A browser check is also useful: visit `https://plugins.trac.wordpress.org/browser/gutenberg/tags/$VERSION` or `https://plugins.trac.wordpress.org/browser/gutenberg/#tags` and confirm the tag appears. The WordPress.org plugin page and Plugin API can lag behind the SVN commit.
 6. **Publish the "What's new" post — user's action.** Agents cannot publish to Make Core. Surface the draft URL, tell the user to hit Publish, and wait for the live URL before continuing.
 7. **Announce** in `#core-editor` (w.org) and `#core` (a8c) — fenced Slack drafts with the live post URL embedded:
    ```
