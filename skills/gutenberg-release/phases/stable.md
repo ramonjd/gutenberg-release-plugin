@@ -22,6 +22,7 @@ Goal: ship stable, publish the post, hand off.
      curl -sI https://plugins.svn.wordpress.org/gutenberg/tags/X.Y.0/ | head -1
      curl -s https://plugins.svn.wordpress.org/gutenberg/trunk/readme.txt | grep -i "Stable tag"
      ```
+     If the workflow failed while checking whether the SVN tag exists, inspect `.github/workflows/upload-release-to-plugin-repo.yml` before falling back to manual SVN. The expected behavior is that a missing tag is treated as `exists=false`; WP.org SVN may report that as `E160013`, `W160013`, `E200009`, or `non-existent`.
    - **If the SVN tag and ZIP are missing**, ask a person with Gutenberg plugin SVN commit access to manually create trunk + tag from the GitHub release artifact. Do not commit `trunk` alone; `Stable tag: X.Y.0` must not point at a missing tag.
    - **Manual SVN publish for an authorized committer**:
      ```bash
