@@ -31,6 +31,7 @@ Goal: ship stable, publish the post, hand off.
      WORK=/tmp/gutenberg-svn-release-$VERSION
      TRUNK=$WORK/trunk
      TAGS=$WORK/tags
+     STABLE_TAG_PLACEHOLDER='Stable tag: V\.V\.V'
 
      # Start clean so stale SVN state or old artifacts cannot leak into the release.
      rm -rf "$WORK"
@@ -46,21 +47,21 @@ Goal: ship stable, publish the post, hand off.
 
      # Replace SVN trunk contents with the ZIP contents, preserving only SVN metadata.
      find "$TRUNK" -mindepth 1 -maxdepth 1 ! -name .svn -exec rm -rf {} +
-     unzip -q "$WORK/gutenberg.zip" -d "$WORK/unzip"
-     rsync -a "$WORK/unzip/" "$TRUNK/"
+     unzip -q "$WORK/gutenberg.zip" -d "$TRUNK"
 
      # Use the workflow-generated changelog and set readme.txt to the new stable tag.
      cp "$WORK/changelog.txt" "$TRUNK/changelog.txt"
-     sed -i.bak "s/^Stable tag:.*/Stable tag: $VERSION/" "$TRUNK/readme.txt" && rm "$TRUNK/readme.txt.bak"
+     sed -i.bak "s/$STABLE_TAG_PLACEHOLDER/Stable tag: $VERSION/g" "$TRUNK/readme.txt" && rm "$TRUNK/readme.txt.bak"
 
-     # Remove files SVN tracks but the new release no longer contains.
+     # Mirror the workflow: add new files and remove tracked files the release no longer contains.
+     svn status "$TRUNK" | awk '$1 == "?" { print $2 }' > "$WORK/new-svn-paths.txt"
+     if [ -s "$WORK/new-svn-paths.txt" ]; then
+       xargs svn add < "$WORK/new-svn-paths.txt"
+     fi
      svn status "$TRUNK" | awk '$1 == "!" { print $2 }' > "$WORK/missing-svn-paths.txt"
      if [ -s "$WORK/missing-svn-paths.txt" ]; then
        xargs svn rm < "$WORK/missing-svn-paths.txt"
      fi
-
-     # Add any new release files under trunk.
-     svn add --force "$TRUNK"
 
      # Create the version tag from trunk using SVN copy-with-history, matching the workflow.
      # This is much cheaper than adding the full tag contents as new files.
@@ -88,6 +89,13 @@ Goal: ship stable, publish the post, hand off.
        --config-option=servers:global:http-timeout=600
      ```
      If SVN errors after `Committing transaction...`, do not immediately retry; run the verification commands again first. If `svn cp` or `svn commit` says creating `gutenberg/tags/X.Y.0` is forbidden, the account does not have the needed plugin SVN permission.
+     If the commit times out, is interrupted, or stalls long enough that the user stops it, run the verification commands first. If the tag/ZIP did not land, clean up the partial local tag and recreate it with the workflow-style SVN copy before rerunning the guardrails and commit:
+     ```bash
+     svn cleanup "$TRUNK" "$TAGS"
+     svn revert -R "$TAGS/$VERSION"
+     rm -rf "$TAGS/$VERSION"
+     svn cp "$TRUNK" "$TAGS/$VERSION"
+     ```
    - **Verify the manual publish succeeded** before continuing with announcements:
      ```bash
      # The versioned ZIP and SVN tag should both exist.
